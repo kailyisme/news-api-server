@@ -17,7 +17,5 @@ module.exports = [
   {
     username: 'lurker',
     name: 'do_nothing',
-    avatar_url:
-      'https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png',
   },
 ];
