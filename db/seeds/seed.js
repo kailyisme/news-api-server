@@ -60,6 +60,25 @@ const seed = (data) => {
     .then(() => {
       return dbConnection.query(dbLoading("articles", articleData));
     })
+    .then(() => {
+      const kvp = {};
+      articleData.forEach((element, i) => {
+        kvp[element.title] = i + 1;
+      });
+      // console.log(kvp);
+      const modifiedCommentData = commentData.map((comment) => {
+        const { body, belongs_to, created_by, votes, created_at } = comment;
+        const article_id = kvp[belongs_to];
+        return {
+          author: created_by,
+          body,
+          votes,
+          created_at,
+          article_id,
+        };
+      });
+      return dbConnection.query(dbLoading("comments", modifiedCommentData));
+    })
     .catch((err) => {
       console.log(err);
     });
