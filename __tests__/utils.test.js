@@ -30,12 +30,9 @@ describe("dbLoading", () => {
       },
     ];
     const result = dbLoading(table_name, data);
-    const keys = Object.keys(data);
-    const values = keys.map((key) => data[key]);
-    //const expected = `${} VALUES (%L)`, keys, values);
-
-    console.log("result = ", result);
-    //console.log(typeof result.indexOf(expected));
+    const keys = Object.keys(data[0]);
+    const values = keys.map((key) => data[0][key]);
+    const expected = format(`(%s) VALUES (%L)`,keys,values);
     expect(result.indexOf(expected)).not.toBe(-1);
   });
 });
