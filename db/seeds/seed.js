@@ -1,6 +1,11 @@
 const format = require("pg-format");
 const dbConnection = require("../connection");
-const { dbLoading } = require("../utils/data-manipulation");
+const {
+  dbLoading,
+  kvpCreator,
+  dataRelationParser,
+  keyNameChanger,
+} = require("../utils/data-manipulation");
 
 const seed = (data) => {
   const { articleData, commentData, topicData, userData } = data;
@@ -58,25 +63,21 @@ const seed = (data) => {
       return dbConnection.query(dbLoading("topics", topicData));
     })
     .then(() => {
-      return dbConnection.query(dbLoading("articles", articleData));
+      return dbConnection.query(dbLoading("articles", articleData, true));
     })
-    .then(() => {
-      const kvp = {};
-      articleData.forEach((element, i) => {
-        kvp[element.title] = i + 1;
-      });
-      // console.log(kvp);
-      const modifiedCommentData = commentData.map((comment) => {
-        const { body, belongs_to, created_by, votes, created_at } = comment;
-        const article_id = kvp[belongs_to];
-        return {
-          author: created_by,
-          body,
-          votes,
-          created_at,
-          article_id,
-        };
-      });
+    .then((result) => {
+      const kvp = kvpCreator(result, "title", "article_id");
+      const parsedData = dataRelationParser(
+        commentData,
+        kvp,
+        "belongs_to",
+        "article_id"
+      );
+      const modifiedCommentData = keyNameChanger(
+        parsedData,
+        "created_by",
+        "author"
+      );
       return dbConnection.query(dbLoading("comments", modifiedCommentData));
     })
     .catch((err) => {

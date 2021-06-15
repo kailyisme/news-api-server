@@ -18,7 +18,7 @@ describe("dbLoading", () => {
     //console.log(result);
     expect(result.startsWith(expected)).toBeTruthy();
   });
-  test("check the string literal is correct", () => {
+  test("check the key value pairs are correct", () => {
     const table_name = "comments";
     const data = [
       {
