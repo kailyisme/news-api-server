@@ -7,14 +7,14 @@ exports.dbLoading = function (table_name, data, flagToReturn = false) {
     let keys = Object.keys(row);
     let values = keys.map((key) => row[key]);
     let toInsertString = format(
-      `${queryBeginning} (%s) VALUES (%L)\n`,
+      `${queryBeginning} (%s) VALUES (%L)`,
       keys,
       values
     );
     if (flagToReturn) {
-      toInsertString += " RETURNING *;";
+      toInsertString += " RETURNING *;\n";
     } else {
-      toInsertString += ";";
+      toInsertString += ";\n";
     }
     insertQuery = `${insertQuery}${toInsertString}`;
   });
