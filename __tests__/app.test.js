@@ -29,25 +29,56 @@ describe("/api/topics", () => {
 });
 
 describe("/api/articles/:article_id", () => {
-  it("Should return an article object under an article key", async () => {
-    const articleIDExpected = 4;
-    await request(app)
-      .get(`/api/articles/${articleIDExpected}`)
-      .expect(200)
-      .expect("Content-Type", "application/json; charset=utf-8")
-      .then((res) => {
-        const { body } = res;
-        expect(body.article).toEqual(
-          expect.objectContaining({
-            article_id: expect.any(Number),
-            title: expect.any(String),
-            topic: expect.any(String),
-            author: expect.any(String),
-            body: expect.any(String),
-            created_at: expect.any(String),
-            votes: expect.any(Number),
-          })
-        );
-      });
+  describe("GET", () => {
+    it("Should return an article object under an article key", async () => {
+      const articleIDExpected = 4;
+      await request(app)
+        .get(`/api/articles/${articleIDExpected}`)
+        .expect(200)
+        .expect("Content-Type", "application/json; charset=utf-8")
+        .then((res) => {
+          const { body } = res;
+          expect(body.article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+            })
+          );
+        });
+    });
+  });
+
+  describe("PATCH", () => {
+    it("Should change the votes of an article by a given amount", async () => {
+      const originalVotes = 100;
+      const changeVotesBy = 10;
+      const articleID = 1;
+      const objectToSend = { inc_votes: changeVotesBy };
+      await request(app)
+        .patch(`/api/articles/${articleID}`)
+        .send(objectToSend)
+        .expect(200)
+        .expect("Content-Type", "application/json; charset=utf-8")
+        .then((res) => {
+          const { body } = res;
+          expect(body.article.votes).toBe(originalVotes + changeVotesBy);
+          expect(body.article).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+            })
+          );
+        });
+    });
   });
 });
