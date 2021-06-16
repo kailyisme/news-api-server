@@ -50,8 +50,15 @@ exports.dataRelationParser = function (data, kvp, keyToSwap, swapTo) {
 
 exports.keyNameChanger = function (data, origKeyName, replKeyName) {
   return data.map((entry) => {
-    entry[replKeyName] = entry[origKeyName];
-    delete entry[origKeyName];
-    return entry;
+    const entryKeys = Object.keys(entry);
+    let tempObj = {};
+    entryKeys.map((key) => {
+      if (key === origKeyName) {
+        tempObj[replKeyName] = entry[key];
+      } else {
+        tempObj[key] = entry[key];
+      }
+    });
+    return tempObj;
   });
 };

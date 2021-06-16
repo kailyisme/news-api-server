@@ -74,6 +74,7 @@ const seed = (data) => {
         "belongs_to",
         "article_id"
       );
+      console.log(parsedData);
       const modifiedCommentData = keyNameChanger(
         parsedData,
         "created_by",

@@ -397,77 +397,127 @@ describe("dataRelationParser", () => {
   });
 });
 
-// describe.only("keyNameChanger", () => {
-//   test("Check an empty data array returns an empty array", () => {
-//     const inputData = [];
-//     const inputOrigKeyName = "title";
-//     const inputReplKeyName = "article_id";
-//     const expected = [];
-//     const output = keyNameChanger(
-//       inputData,
-//       inputOrigKeyName,
-//       inputReplKeyName
-//     );
-//     expect(output).toEqual(expected);
-//   });
-//   test("Check a single line data file returns the keys swapped over", () => {
-//     const inputData = [];
-//     const inputOrigKeyName = "title";
-//     const inputReplKeyName = "article_id";
-//     const expected = [];
-//     const output = keyNameChanger(
-//       inputData,
-//       inputOrigKeyName,
-//       inputReplKeyName
-//     );
-//     expect(output).toEqual(expected);
-//   });
-//   test("Check a multi line data file returns the keys swapped over", () => {
-//     const inputData = [];
-//     const inputOrigKeyName = "title";
-//     const inputReplKeyName = "article_id";
-//     const expected = [];
-//     const output = keyNameChanger(
-//       inputData,
-//       inputOrigKeyName,
-//       inputReplKeyName
-//     );
-//     expect(output).toEqual(expected);
-//   });
-//   test("Check for error if origKeyName does not exist", () => {
-//     const inputData = [];
-//     const inputOrigKeyName = "title";
-//     const inputReplKeyName = "article_id";
-//     const expected = [];
-//     const output = keyNameChanger(
-//       inputData,
-//       inputOrigKeyName,
-//       inputReplKeyName
-//     );
-//     expect(output).toEqual(expected);
-//   });
-//   test("Check for error if replKeyName does not exist", () => {
-//     const inputData = [];
-//     const inputOrigKeyName = "title";
-//     const inputReplKeyName = "article_id";
-//     const expected = [];
-//     const output = keyNameChanger(
-//       inputData,
-//       inputOrigKeyName,
-//       inputReplKeyName
-//     );
-//     expect(output).toEqual(expected);
-//   });
-//   test("Check the original array has not mutated", () => {
-//     const inputData = [];
-//     const expected = []; // Hard coded copy of inputData
-//     const inputOrigKeyName = "title";
-//     const inputReplKeyName = "article_id";
-//     const output = keyNameChanger(
-//       inputData,
-//       inputOrigKeyName,
-//       inputReplKeyName
-//     );
-//     expect(inputData).toEqual(expected);
-//   });
-// });
+describe("keyNameChanger", () => {
+  test("Check an empty data array returns an empty array", () => {
+    const inputData = [];
+    const inputOrigKeyName = "created_by";
+    const inputReplKeyName = "author";
+    const expected = [];
+    const output = keyNameChanger(
+      inputData,
+      inputOrigKeyName,
+      inputReplKeyName
+    );
+    expect(output).toEqual(expected);
+  });
+  test("Check a single line data file returns the keys swapped over", () => {
+    const inputData = [
+      {
+        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        article_id: 9,
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+    ];
+    const inputOrigKeyName = "created_by";
+    const inputReplKeyName = "author";
+    const expected = [
+      {
+        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        article_id: 9,
+        author: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+    ];
+    const output = keyNameChanger(
+      inputData,
+      inputOrigKeyName,
+      inputReplKeyName
+    );
+    expect(output).toEqual(expected);
+  });
+  test("Check a multi line data file returns the keys swapped over", () => {
+    const inputData = [
+      {
+        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        article_id: 9,
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+      {
+        body: "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+        article_id: 1,
+        created_by: "butter_bridge",
+        votes: 14,
+        created_at: "2020-10-31T03:03:00.000Z",
+      },
+    ];
+    const inputOrigKeyName = "created_by";
+    const inputReplKeyName = "author";
+    const expected = [
+      {
+        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        article_id: 9,
+        author: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+      {
+        body: "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+        article_id: 1,
+        author: "butter_bridge",
+        votes: 14,
+        created_at: "2020-10-31T03:03:00.000Z",
+      },
+    ];
+    const output = keyNameChanger(
+      inputData,
+      inputOrigKeyName,
+      inputReplKeyName
+    );
+    expect(output).toEqual(expected);
+  });
+
+  test("Check the original array has not mutated", () => {
+    const inputData = [
+      {
+        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        article_id: 9,
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+      {
+        body: "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+        article_id: 1,
+        created_by: "butter_bridge",
+        votes: 14,
+        created_at: "2020-10-31T03:03:00.000Z",
+      },
+    ];
+    const inputDataCopy = [
+      {
+        body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+        article_id: 9,
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+      {
+        body: "The beautiful thing about treasure is that it exists. Got to find out what kind of sheets these are; not cotton, not rayon, silky.",
+        article_id: 1,
+        created_by: "butter_bridge",
+        votes: 14,
+        created_at: "2020-10-31T03:03:00.000Z",
+      },
+    ];
+
+    const inputOrigKeyName = "created_by";
+    const inputReplKeyName = "author";
+    keyNameChanger(inputData, inputOrigKeyName, inputReplKeyName);
+    expect(inputData).toEqual(inputDataCopy);
+  });
+});
