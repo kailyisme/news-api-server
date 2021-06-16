@@ -12,3 +12,11 @@ exports.selectArticleByID = async function (id) {
   );
   return result.rows[0];
 };
+
+exports.updateArticleVotes = async function (id, newVotes) {
+  const result = await dbConn.query(
+    "UPDATE articles SET votes = votes + $1 WHERE article_id = $2 RETURNING *;",
+    [newVotes, id]
+  );
+  return result.rows[0];
+};

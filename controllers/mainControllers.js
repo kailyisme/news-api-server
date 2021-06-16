@@ -1,4 +1,8 @@
-const { selectAllTopics, selectArticleByID } = require("../models/mainModels");
+const {
+  selectAllTopics,
+  selectArticleByID,
+  updateArticleVotes,
+} = require("../models/mainModels");
 
 exports.getTopics = function (req, res) {
   selectAllTopics().then((topics) => {
@@ -8,6 +12,13 @@ exports.getTopics = function (req, res) {
 
 exports.getArticleByID = function (req, res) {
   selectArticleByID(req.params.article_id).then((article) =>
+    res.send({ article })
+  );
+};
+
+exports.patchArticleByIDByVotes = function (req, res) {
+  const incVotesBy = req.body.inc_votes;
+  updateArticleVotes(req.params.article_id, incVotesBy).then((article) =>
     res.send({ article })
   );
 };
