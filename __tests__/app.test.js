@@ -37,9 +37,9 @@ describe("/api/articles/:article_id", () => {
       .expect("Content-Type", "application/json; charset=utf-8")
       .then((res) => {
         const { body } = res;
-        expect(body).toHaveLength(1);
         expect(body.article).toEqual(
           expect.objectContaining({
+            article_id: expect.any(Number),
             title: expect.any(String),
             topic: expect.any(String),
             author: expect.any(String),
