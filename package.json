@@ -2,7 +2,7 @@
   "name": "be-nc-news",
   "version": "1.0.0",
   "description": "bc-nc-news",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
@@ -21,7 +21,8 @@
   "homepage": "https://github.com/northcoders/be-nc-news#readme",
   "devDependencies": {
     "@types/jest": "^26.0.23",
-    "jest": "^27.0.4"
+    "jest": "^27.0.4",
+    "supertest": "^6.1.3"
   },
   "dependencies": {
     "dotenv": "^10.0.0",
