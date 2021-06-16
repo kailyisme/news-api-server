@@ -27,3 +27,27 @@ describe("/api/topics", () => {
       });
   });
 });
+
+describe("/api/articles/:article_id", () => {
+  it("Should return an article object under an article key", async () => {
+    const articleIDExpected = 4;
+    await request(app)
+      .get(`/api/articles/${articleIDExpected}`)
+      .expect(200)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .then((res) => {
+        const { body } = res;
+        expect(body).toHaveLength(1);
+        expect(body.article).toEqual(
+          expect.objectContaining({
+            title: expect.any(String),
+            topic: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+          })
+        );
+      });
+  });
+});
