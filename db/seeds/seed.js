@@ -67,7 +67,7 @@ const seed = (data) => {
     })
     .then((result) => {
       const kvp = kvpCreator(result, "title", "article_id");
-      console.log(kvp);
+
       const parsedData = dataRelationParser(
         commentData,
         kvp,

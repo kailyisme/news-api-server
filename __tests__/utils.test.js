@@ -84,7 +84,6 @@ describe("dbLoading", () => {
       },
     ];
     const result = dbLoading(table_name, data);
-    console.log(result);
     const expectedRegEx = /INSERT INTO .* VALUES .*;/i;
     expect(expectedRegEx.test(result)).toBeTruthy();
   });
@@ -239,107 +238,166 @@ describe("kvpCreator", () => {
   });
 });
 
-// describe("dataRelationParser", () => {
-//   test("Check an empty data array returns an empty array", () => {
-//     const inputData = [];
-//     const inputKVP = {};
-//     const inputKeyToSwapFrom = "title";
-//     const inputKeyToSwapTo = "article_id";
-//     const expected = [];
-//     const output = dataRelationParser(
-//       inputData,
-//       inputKVP,
-//       inputKeyToSwapFrom,
-//       inputKeyToSwapTo
-//     );
-//     expect(output).toEqual(expected);
-//   });
-//   test("Check a single line data file is parsed properly", () => {
-//     const inputData = [];
-//     const inputKVP = {};
-//     const inputKeyToSwapFrom = "title";
-//     const inputKeyToSwapTo = "article_id";
-//     const expected = [];
-//     const output = dataRelationParser(
-//       inputData,
-//       inputKVP,
-//       inputKeyToSwapFrom,
-//       inputKeyToSwapTo
-//     );
-//     expect(output).toEqual(expected);
-//   });
-//   test("Check a multi line data file is parsed properly", () => {
-//     const inputData = [];
-//     const inputKVP = {};
-//     const inputKeyToSwapFrom = "title";
-//     const inputKeyToSwapTo = "article_id";
-//     const expected = [];
-//     const output = dataRelationParser(
-//       inputData,
-//       inputKVP,
-//       inputKeyToSwapFrom,
-//       inputKeyToSwapTo
-//     );
-//     expect(output).toEqual(expected);
-//   });
-//   test("Check data file is parsed properly when there is no valid kvp to swap", () => {
-//     const inputData = [];
-//     const inputKVP = {};
-//     const inputKeyToSwapFrom = "title";
-//     const inputKeyToSwapTo = "article_id";
-//     const expected = [];
-//     const output = dataRelationParser(
-//       inputData,
-//       inputKVP,
-//       inputKeyToSwapFrom,
-//       inputKeyToSwapTo
-//     );
-//     expect(output).toEqual(expected);
-//   });
-//   test("Returns an error when keyToSwap is not valid", () => {
-//     const inputData = [];
-//     const inputKVP = {};
-//     const inputKeyToSwapFrom = "title";
-//     const inputKeyToSwapTo = "article_id";
-//     const expected = [];
-//     const output = dataRelationParser(
-//       inputData,
-//       inputKVP,
-//       inputKeyToSwapFrom,
-//       inputKeyToSwapTo
-//     );
-//     expect(output).toEqual(expected);
-//   });
-//   test("Returns an error when swapTo argument is not valid", () => {
-//     const inputData = [];
-//     const inputKVP = {};
-//     const inputKeyToSwapFrom = "title";
-//     const inputKeyToSwapTo = "article_id";
-//     const expected = [];
-//     const output = dataRelationParser(
-//       inputData,
-//       inputKVP,
-//       inputKeyToSwapFrom,
-//       inputKeyToSwapTo
-//     );
-//     expect(output).toEqual(expected);
-//   });
-//   test("Check the original array does not mutate", () => {
-//     const inputData = [];
-//     const inputKVP = {};
-//     const inputKeyToSwapFrom = "title";
-//     const inputKeyToSwapTo = "article_id";
-//     const expected = [];
-//     const output = dataRelationParser(
-//       inputData,
-//       inputKVP,
-//       inputKeyToSwapFrom,
-//       inputKeyToSwapTo
-//     );
-//     expect(inputData).toEqual(expected);
-//   });
-// });
-// describe("keyNameChanger", () => {
+describe("dataRelationParser", () => {
+  test("Check an empty data array returns an empty array", () => {
+    const inputData = [];
+    const inputKVP = [
+      { title: "Living in the shadow of a great man", article_id: 1 },
+      { title: "Sony Vaio; or, The Laptop", article_id: 2 },
+    ];
+    const inputKeyToSwapFrom = "title";
+    const inputKeyToSwapTo = "article_id";
+    const expected = [];
+    const output = dataRelationParser(
+      inputData,
+      inputKVP,
+      inputKeyToSwapFrom,
+      inputKeyToSwapTo
+    );
+    expect(output).toEqual(expected);
+  });
+  test("Check a single line data file is parsed properly", () => {
+    const inputData = [
+      {
+        body: "Oh, I've got compassion running out of my nose",
+        belongs_to: "They're not exactly dogs, are they?",
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+    ];
+    const inputKVP = [
+      { title: "Living in the shadow of a great man", article_id: 1 },
+      { title: "Sony Vaio; or, The Laptop", article_id: 2 },
+      { title: "They're not exactly dogs, are they?", article_id: 9 },
+    ];
+    const inputKeyToSwapFrom = "belongs_to";
+    const inputKeyToSwapTo = "article_id";
+    const expected = [
+      {
+        body: "Oh, I've got compassion running out of my nose",
+        article_id: 9,
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+    ];
+    const output = dataRelationParser(
+      inputData,
+      inputKVP,
+      inputKeyToSwapFrom,
+      inputKeyToSwapTo
+    );
+    expect(output).toEqual(expected);
+  });
+  test("Check a multi line data file is parsed properly", () => {
+    const inputData = [
+      {
+        body: "Oh, I've got compassion running out of my nose",
+        belongs_to: "They're not exactly dogs, are they?",
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+      {
+        body: "The beautiful thing about treasure is that it exists.",
+        belongs_to: "Living in the shadow of a great man",
+        created_by: "butter_bridge",
+        votes: 14,
+        created_at: "2020-10-31T03:03:00.000Z",
+      },
+    ];
+    const inputKVP = [
+      { title: "Living in the shadow of a great man", article_id: 1 },
+      { title: "Sony Vaio; or, The Laptop", article_id: 2 },
+      { title: "They're not exactly dogs, are they?", article_id: 9 },
+    ];
+    const inputKeyToSwapFrom = "belongs_to";
+    const inputKeyToSwapTo = "article_id";
+    const expected = [
+      {
+        body: "Oh, I've got compassion running out of my nose",
+        article_id: 9,
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+      {
+        body: "The beautiful thing about treasure is that it exists.",
+        article_id: 1,
+        created_by: "butter_bridge",
+        votes: 14,
+        created_at: "2020-10-31T03:03:00.000Z",
+      },
+    ];
+    const output = dataRelationParser(
+      inputData,
+      inputKVP,
+      inputKeyToSwapFrom,
+      inputKeyToSwapTo
+    );
+    expect(output).toEqual(expected);
+  });
+  test("Check the original data and the kvp arrays do not mutate", () => {
+    const inputData = [
+      {
+        body: "Oh, I've got compassion running out of my nose",
+        belongs_to: "They're not exactly dogs, are they?",
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+      {
+        body: "The beautiful thing about treasure is that it exists.",
+        belongs_to: "Living in the shadow of a great man",
+        created_by: "butter_bridge",
+        votes: 14,
+        created_at: "2020-10-31T03:03:00.000Z",
+      },
+    ];
+
+    const inputDataCopy = [
+      {
+        body: "Oh, I've got compassion running out of my nose",
+        belongs_to: "They're not exactly dogs, are they?",
+        created_by: "butter_bridge",
+        votes: 16,
+        created_at: "2020-04-06T13:17:00.000Z",
+      },
+      {
+        body: "The beautiful thing about treasure is that it exists.",
+        belongs_to: "Living in the shadow of a great man",
+        created_by: "butter_bridge",
+        votes: 14,
+        created_at: "2020-10-31T03:03:00.000Z",
+      },
+    ];
+
+    const inputKVP = [
+      { title: "Living in the shadow of a great man", article_id: 1 },
+      { title: "Sony Vaio; or, The Laptop", article_id: 2 },
+      { title: "They're not exactly dogs, are they?", article_id: 9 },
+    ];
+    const inputKVPCopy = [
+      { title: "Living in the shadow of a great man", article_id: 1 },
+      { title: "Sony Vaio; or, The Laptop", article_id: 2 },
+      { title: "They're not exactly dogs, are they?", article_id: 9 },
+    ];
+
+    const inputKeyToSwapFrom = "belongs_to";
+    const inputKeyToSwapTo = "article_id";
+    dataRelationParser(
+      inputData,
+      inputKVP,
+      inputKeyToSwapFrom,
+      inputKeyToSwapTo
+    );
+    expect(inputData).toEqual(inputDataCopy);
+    expect(inputKVP).toEqual(inputKVPCopy);
+  });
+});
+
+// describe.only("keyNameChanger", () => {
 //   test("Check an empty data array returns an empty array", () => {
 //     const inputData = [];
 //     const inputOrigKeyName = "title";
