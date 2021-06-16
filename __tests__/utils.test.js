@@ -514,7 +514,6 @@ describe("keyNameChanger", () => {
         created_at: "2020-10-31T03:03:00.000Z",
       },
     ];
-
     const inputOrigKeyName = "created_by";
     const inputReplKeyName = "author";
     keyNameChanger(inputData, inputOrigKeyName, inputReplKeyName);
