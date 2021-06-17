@@ -62,12 +62,9 @@ exports.selectArticleCommentsById = async function (article_id) {
 };
 
 exports.insertCommentByArticleId = async function (article_id, username, body) {
-  const votes = 0;
-  const created_at = "2018-10-10"; // temp until I can figure out the date format
-  //const created_at = new Date();
   const result = await dbConn.query(
-    "INSERT INTO comments (created_by, article_id, votes, created_at, body) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
-    [username, article_id, votes, created_at, body]
+    "INSERT INTO comments (created_by, article_id, body) VALUES ($1, $2, $3) RETURNING *;",
+    [username, article_id, body]
   );
   return result.rows;
 };
