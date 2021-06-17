@@ -23,7 +23,6 @@ exports.updateArticleVotes = async function (id, newVotes) {
   return result.rows[0];
 };
 
-// added the following
 exports.selectAllArticles = async function (sort_by, order, topic) {
   if (!sort_by) {
     sort_by = `created_at`;
@@ -39,18 +38,6 @@ exports.selectAllArticles = async function (sort_by, order, topic) {
   if (topic) {
     whereTopic = format("WHERE articles.topic = %L", topic);
   }
-  console.log(whereTopic, "<<topic");
-  //const result = await dbConn.query("SELECT * FROM articles;");
-
-  // need to get the comment count:-
-  // join comments table to articles table
-  // articles.title = comments.belongs_to
-  // LEFT JOIN comments ON comments.belongs_to = articles.title
-
-  // then count the comments
-  // COUNT(article_id) AS number_of_articles FROM articles
-
-  // does the following look correct to achieve this ???
 
   const result = await dbConn.query(
     `SELECT articles.*, COUNT(comments.comment_id) AS comment_count FROM articles NATURAL LEFT JOIN comments ${whereTopic} GROUP BY article_id ORDER BY ${sort_by} ${order};`

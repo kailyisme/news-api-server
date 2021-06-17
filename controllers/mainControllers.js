@@ -24,9 +24,7 @@ exports.patchArticleByIDByVotes = function (req, res) {
   );
 };
 
-// added the following
 exports.getAllArticles = function (req, res) {
-  console.log(req.query, "<<query");
   selectAllArticles(req.query.sort_by, req.query.order, req.query.topic).then(
     (articles) => {
       res.send({ articles });
@@ -34,8 +32,8 @@ exports.getAllArticles = function (req, res) {
   );
 };
 
-exports.getArticleCommentsById = function (req, res) {
-  selectArticleCommentsById(xxxxxx).then((comments) => {
-    res.send({ comments });
-  });
-};
+// exports.getArticleCommentsById = function (req, res) {
+//   selectArticleCommentsById(xxxxxx).then((comments) => {
+//     res.send({ comments });
+//   });
+// };

@@ -3,6 +3,7 @@ const db = require("../db/connection.js");
 const testData = require("../db/data/test-data/index.js");
 const seed = require("../db/seeds/seed.js");
 const request = require("supertest");
+const { toBeSortedBy } = require("jest-sorted");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -108,6 +109,51 @@ describe("/api/articles", () => {
             })
           );
         });
+      });
+  });
+  it("Should return an array of articles as objects sorted by created_at column and ascending order", async () => {
+    await request(app)
+      .get("/api/articles")
+      .expect(200)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toBeSortedBy("created_at");
+      });
+  });
+  it("Should return an array of articles as objects sorted by votes column", async () => {
+    await request(app)
+      .get("/api/articles?sort_by=votes")
+      .expect(200)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toBeSortedBy("votes");
+      });
+  });
+  it("Should return an array of articles as objects sorted by author column and descending", async () => {
+    await request(app)
+      .get("/api/articles?order=desc&sort_by=author")
+      .expect(200)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toBeSortedBy("author", { descending: true });
+      });
+  });
+  it("Should return an array of articles as objects sorted by comment_count column descending and specific topic", async () => {
+    const topic = "mitch";
+    await request(app)
+      .get(`/api/articles?order=desc&sort_by=comment_count&topic=${topic}`)
+      .expect(200)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .then((res) => {
+        const { articles } = res.body;
+        expect(articles).toHaveLength(11);
+        expect(articles).toBeSortedBy("comment_count", { descending: true });
+        expect(
+          articles.every((article) => article.topic === topic)
+        ).toBeTruthy();
       });
   });
 });
