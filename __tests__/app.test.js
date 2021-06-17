@@ -82,3 +82,32 @@ describe("/api/articles/:article_id", () => {
     });
   });
 });
+
+// added the following test
+
+describe("/api/articles", () => {
+  it("Should return an array of articles as objects ", async () => {
+    await request(app)
+      .get("/api/articles")
+      .expect(200)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .then((res) => {
+        const { body } = res;
+        expect(body.articles).toHaveLength(12);
+        body.articles.forEach((topic) => {
+          expect(topic).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              title: expect.any(String),
+              topic: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+              created_at: expect.any(String),
+              votes: expect.any(Number),
+              comment_count: expect.any(Number),
+            })
+          );
+        });
+      });
+  });
+});

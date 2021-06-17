@@ -3,6 +3,7 @@ const {
   kvpCreator,
   dataRelationParser,
   keyNameChanger,
+  postgresNumber,
 } = require("../db/utils/data-manipulation");
 const format = require("pg-format");
 
@@ -480,7 +481,6 @@ describe("keyNameChanger", () => {
     );
     expect(output).toEqual(expected);
   });
-
   test("Check the original array has not mutated", () => {
     const inputData = [
       {
@@ -517,6 +517,114 @@ describe("keyNameChanger", () => {
     const inputOrigKeyName = "created_by";
     const inputReplKeyName = "author";
     keyNameChanger(inputData, inputOrigKeyName, inputReplKeyName);
+    expect(inputData).toEqual(inputDataCopy);
+  });
+});
+describe("postgresNumber", () => {
+  test("Check empty array returns empty array", () => {
+    const inputData = [];
+    const varNameToForecast = "";
+    const expected = [];
+    const result = postgresNumber(inputData, varNameToForecast);
+    expect(result).toEqual(expected);
+  });
+  test("Check the varName has changed from string to number", () => {
+    const inputData = [
+      {
+        article_id: 4,
+        title: "Student SUES Mitch!",
+        body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        votes: 0,
+        topic: "mitch",
+        author: "rogersop",
+        created_at: "2020-05-05T23:00:00.000Z",
+        comment_count: "0",
+      },
+      {
+        article_id: 10,
+        title: "Seven inspirational thought leaders from Manchester UK",
+        body: "Who are we kidding, there is only one, and it's Mitch!",
+        votes: 0,
+        topic: "mitch",
+        author: "rogersop",
+        created_at: "2020-05-13T23:00:00.000Z",
+        comment_count: "0",
+      },
+    ];
+    const varNameToForecast = "comment_count";
+    const expected = [
+      {
+        article_id: 4,
+        title: "Student SUES Mitch!",
+        body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        votes: 0,
+        topic: "mitch",
+        author: "rogersop",
+        created_at: "2020-05-05T23:00:00.000Z",
+        comment_count: 0,
+      },
+      {
+        article_id: 10,
+        title: "Seven inspirational thought leaders from Manchester UK",
+        body: "Who are we kidding, there is only one, and it's Mitch!",
+        votes: 0,
+        topic: "mitch",
+        author: "rogersop",
+        created_at: "2020-05-13T23:00:00.000Z",
+        comment_count: 0,
+      },
+    ];
+    const result = postgresNumber(inputData, varNameToForecast);
+    expect(result).toEqual(expected);
+  });
+  test("Check the original array does not mutate", () => {
+    const inputData = [
+      {
+        article_id: 4,
+        title: "Student SUES Mitch!",
+        body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        votes: 0,
+        topic: "mitch",
+        author: "rogersop",
+        created_at: "2020-05-05T23:00:00.000Z",
+        comment_count: "0",
+      },
+      {
+        article_id: 10,
+        title: "Seven inspirational thought leaders from Manchester UK",
+        body: "Who are we kidding, there is only one, and it's Mitch!",
+        votes: 0,
+        topic: "mitch",
+        author: "rogersop",
+        created_at: "2020-05-13T23:00:00.000Z",
+        comment_count: "0",
+      },
+    ];
+    const inputDataCopy = [
+      {
+        article_id: 4,
+        title: "Student SUES Mitch!",
+        body: "We all love Mitch and his wonderful, unique typing style. However, the volume of his typing has ALLEGEDLY burst another students eardrums, and they are now suing for damages",
+        votes: 0,
+        topic: "mitch",
+        author: "rogersop",
+        created_at: "2020-05-05T23:00:00.000Z",
+        comment_count: "0",
+      },
+      {
+        article_id: 10,
+        title: "Seven inspirational thought leaders from Manchester UK",
+        body: "Who are we kidding, there is only one, and it's Mitch!",
+        votes: 0,
+        topic: "mitch",
+        author: "rogersop",
+        created_at: "2020-05-13T23:00:00.000Z",
+        comment_count: "0",
+      },
+    ];
+
+    const varNameToForecast = "comment_count";
+    postgresNumber(inputData, varNameToForecast);
     expect(inputData).toEqual(inputDataCopy);
   });
 });
