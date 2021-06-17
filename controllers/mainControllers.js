@@ -47,8 +47,8 @@ exports.getArticleCommentsById = function (req, res, next) {
 // POST /api/articles/:article_id/comments
 exports.postArticleCommentById = function (req, res, next) {
   const { article_id } = req.params;
-  const { comment } = req.body;
-  insertCommentByArticleId(article_id, comment)
+  const { username, body } = req.body;
+  insertCommentByArticleId(article_id, username, body)
     .then((comment) => {
       res.status(201).send(comment);
     })

@@ -192,7 +192,6 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
-
   test("Should return the correct number of comments for the article_id", function () {
     const article_ids = [2, 5, 6, 9];
     const expectedComments = [0, 2, 1, 2];

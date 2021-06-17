@@ -53,12 +53,21 @@ exports.selectAllArticles = async function (sort_by, order, topic) {
   return postgresNumber(result.rows, "comment_count");
 };
 
-// added this
 exports.selectArticleCommentsById = async function (article_id) {
   const result = await dbConn.query(
-    // join articles.title to comments.belongs_to
     "SELECT * FROM comments WHERE article_id = $1;",
     [article_id]
+  );
+  return result.rows;
+};
+
+exports.insertCommentByArticleId = async function (article_id, username, body) {
+  const votes = 0;
+  const created_at = "2018-10-10"; // temp until I can figure out the date format
+  //const created_at = new Date();
+  const result = await dbConn.query(
+    "INSERT INTO comments (created_by, article_id, votes, created_at, body) VALUES ($1, $2, $3, $4, $5) RETURNING *;",
+    [username, article_id, votes, created_at, body]
   );
   return result.rows;
 };
