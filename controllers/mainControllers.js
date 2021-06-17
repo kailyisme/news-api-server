@@ -4,6 +4,7 @@ const {
   updateArticleVotes,
   selectAllArticles,
   selectArticleCommentsById,
+  insertCommentByArticleId,
 } = require("../models/mainModels");
 
 // GET /api/topics
@@ -35,12 +36,21 @@ exports.getAllArticles = function (req, res, next) {
     .catch(next);
 };
 // GET /api/articles/:article_id/comments
-// added the following
 exports.getArticleCommentsById = function (req, res, next) {
   const { article_id } = req.params;
   selectArticleCommentsById(article_id)
     .then((comments) => {
       res.send({ comments });
+    })
+    .catch(next);
+};
+// POST /api/articles/:article_id/comments
+exports.postArticleCommentById = function (req, res, next) {
+  const { article_id } = req.params;
+  const { comment } = req.body;
+  insertCommentByArticleId(article_id, comment)
+    .then((comment) => {
+      res.status(201).send(comment);
     })
     .catch(next);
 };

@@ -194,18 +194,21 @@ describe("GET /api/articles/:article_id/comments", () => {
   });
 
   test("Should return the correct number of comments for the article_id", function () {
-    const article_id = [2, 5, 6, 9];
+    const article_ids = [2, 5, 6, 9];
     const expectedComments = [0, 2, 1, 2];
-    article_id.forEach((article_id, i) => {
-      request(app)
-        .get(`/api/articles/${article_id}/comments`)
-        .expect(200)
-        .expect("Content-Type", "application/json; charset=utf-8")
-        .then((res) => {
-          const { body } = res;
-          expect(body.comments).toHaveLength(expectedComments[i]);
-        })
-        .catch((err) => console.log(err));
-    });
+    return Promise.all(
+      article_ids.map((id, i) => {
+        const endpoint = `/api/articles/${id}/comments`;
+        return request(app)
+          .get(endpoint)
+          .expect(200)
+          .expect("Content-Type", "application/json; charset=utf-8")
+          .then((res) => {
+            const { body } = res;
+            expect(body.comments).toHaveLength(expectedComments[i]);
+          });
+        // .catch((err) => console.log("this is the error : ", err));
+      })
+    );
   });
 });
