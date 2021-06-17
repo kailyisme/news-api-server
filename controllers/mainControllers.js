@@ -9,22 +9,24 @@ const {
 
 // GET /api/topics
 exports.getTopics = function (req, res) {
-  selectAllTopics().then((topics) => {
-    res.send({ topics });
-  });
+  selectAllTopics()
+    .then((topics) => {
+      res.send({ topics });
+    })
+    .catch(next);
 };
 // GET /api/articles/:article_id
 exports.getArticleByID = function (req, res) {
-  selectArticleByID(req.params.article_id).then((article) =>
-    res.send({ article })
-  );
+  selectArticleByID(req.params.article_id)
+    .then((article) => res.send({ article }))
+    .catch(next);
 };
 // PATCH /api/articles/:article_id
 exports.patchArticleByIDByVotes = function (req, res) {
   const incVotesBy = req.body.inc_votes;
-  updateArticleVotes(req.params.article_id, incVotesBy).then((article) =>
-    res.send({ article })
-  );
+  updateArticleVotes(req.params.article_id, incVotesBy)
+    .then((article) => res.send({ article }))
+    .catch(next);
 };
 // GET /api/articles
 exports.getAllArticles = function (req, res, next) {

@@ -206,7 +206,6 @@ describe("GET /api/articles/:article_id/comments", () => {
             const { body } = res;
             expect(body.comments).toHaveLength(expectedComments[i]);
           });
-        // .catch((err) => console.log("this is the error : ", err));
       })
     );
   });

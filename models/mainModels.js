@@ -63,7 +63,7 @@ exports.selectArticleCommentsById = async function (article_id) {
 
 exports.insertCommentByArticleId = async function (article_id, username, body) {
   const result = await dbConn.query(
-    "INSERT INTO comments (created_by, article_id, body) VALUES ($1, $2, $3) RETURNING *;",
+    "INSERT INTO comments (author, article_id, body) VALUES ($1, $2, $3) RETURNING *;",
     [username, article_id, body]
   );
   return result.rows;
