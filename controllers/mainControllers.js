@@ -24,12 +24,12 @@ exports.patchArticleByIDByVotes = function (req, res) {
   );
 };
 
-exports.getAllArticles = function (req, res) {
-  selectAllArticles(req.query.sort_by, req.query.order, req.query.topic).then(
-    (articles) => {
+exports.getAllArticles = function (req, res, next) {
+  selectAllArticles(req.query.sort_by, req.query.order, req.query.topic)
+    .then((articles) => {
       res.send({ articles });
-    }
-  );
+    })
+    .catch(next);
 };
 
 // exports.getArticleCommentsById = function (req, res) {

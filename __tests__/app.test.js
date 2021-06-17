@@ -156,4 +156,15 @@ describe("/api/articles", () => {
         ).toBeTruthy();
       });
   });
+  it("Should return a 404 (invalid topic) for an invalid specific topic", async () => {
+    const topic = "mitc";
+    await request(app)
+      .get(`/api/articles?order=desc&sort_by=comment_count&topic=${topic}`)
+      .expect(404)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .then((res) => {
+        const { body } = res;
+        expect(body).toEqual({ err: "Invalid Topic" });
+      });
+  });
 });

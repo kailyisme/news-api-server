@@ -42,7 +42,14 @@ exports.selectAllArticles = async function (sort_by, order, topic) {
   const result = await dbConn.query(
     `SELECT articles.*, COUNT(comments.comment_id) AS comment_count FROM articles NATURAL LEFT JOIN comments ${whereTopic} GROUP BY article_id ORDER BY ${sort_by} ${order};`
   );
-
+  if (result.rows.length === 0) {
+    const result = await dbConn.query(
+      format("SELECT * FROM topics WHERE slug=%L;", topic)
+    );
+    if (result.rows.length === 0) {
+      return Promise.reject({ status: 404, msg: "Invalid Topic" });
+    }
+  }
   // then need to sort_by any column
   // const validColumnsForSorting = ['article_id', 'title', 'topic', 'author', 'body', 'created_at', 'votes'];
   // if(!validColumnsForSorting.includes(sort_by)) {return Promise.reject({status: 400, msg: 'Invalid sort_by column'})};
