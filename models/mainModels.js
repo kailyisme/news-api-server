@@ -50,20 +50,17 @@ exports.selectAllArticles = async function (sort_by, order, topic) {
       return Promise.reject({ status: 404, msg: "Invalid Topic" });
     }
   }
-  // then need to sort_by any column
-  // const validColumnsForSorting = ['article_id', 'title', 'topic', 'author', 'body', 'created_at', 'votes'];
-  // if(!validColumnsForSorting.includes(sort_by)) {return Promise.reject({status: 400, msg: 'Invalid sort_by column'})};
-  // Revised query is therefore:-
-  //const result = await dbConn.query("SELECT *, COUNT(article_id) AS number_of_articles FROM articles LEFT JOIN comments ON comments.belongs_to = articles.title ORDER BY ${sort_by} ASC;");
-
-  // then need to order using ORDER BY ASC or DESC
-  // Revised query is therefore:-
-  //const result = await dbConn.query("SELECT *, COUNT(article_id) AS number_of_articles FROM articles LEFT JOIN comments ON comments.belongs_to = articles.title ORDER BY ${sort_by} ${order};");
-
-  // then need to filter by topic
-  //
-
   return postgresNumber(result.rows, "comment_count");
+};
+
+// added this
+exports.selectArticleCommentsById = async function (article_id) {
+  const result = await dbConn.query(
+    // join articles.title to comments.belongs_to
+    "SELECT * FROM comments WHERE article_id = $1;",
+    [article_id]
+  );
+  return result.rows;
 };
 
 //postgres Error 42703 - errorMissingColumn - not a valid column to sort by?

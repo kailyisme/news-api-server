@@ -168,3 +168,44 @@ describe("/api/articles", () => {
       });
   });
 });
+describe("GET /api/articles/:article_id/comments", () => {
+  test("Should return an array of comments for a specific article_id", async function () {
+    const article_id = 1;
+    await request(app)
+      .get(`/api/articles/${article_id}/comments`)
+      .expect(200)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .then((res) => {
+        const { body } = res;
+        expect(body.comments).toHaveLength(13);
+        body.comments.forEach((comment) => {
+          expect(comment).toEqual(
+            expect.objectContaining({
+              article_id: expect.any(Number),
+              comment_id: expect.any(String),
+              votes: expect.any(Number),
+              created_at: expect.any(String),
+              author: expect.any(String),
+              body: expect.any(String),
+            })
+          );
+        });
+      });
+  });
+
+  test("Should return the correct number of comments for the article_id", function () {
+    const article_id = [2, 5, 6, 9];
+    const expectedComments = [0, 2, 1, 2];
+    article_id.forEach((article_id, i) => {
+      request(app)
+        .get(`/api/articles/${article_id}/comments`)
+        .expect(200)
+        .expect("Content-Type", "application/json; charset=utf-8")
+        .then((res) => {
+          const { body } = res;
+          expect(body.comments).toHaveLength(expectedComments[i]);
+        })
+        .catch((err) => console.log(err));
+    });
+  });
+});
