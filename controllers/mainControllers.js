@@ -26,11 +26,12 @@ exports.patchArticleByIDByVotes = function (req, res) {
 
 // added the following
 exports.getAllArticles = function (req, res) {
-  console.log(req.query);
-
-  selectAllArticles(req.query.sort_by, req.query.order).then((articles) => {
-    res.send({ articles });
-  });
+  console.log(req.query, "<<query");
+  selectAllArticles(req.query.sort_by, req.query.order, req.query.topic).then(
+    (articles) => {
+      res.send({ articles });
+    }
+  );
 };
 
 exports.getArticleCommentsById = function (req, res) {
