@@ -4,6 +4,7 @@ const testData = require("../db/data/test-data/index.js");
 const seed = require("../db/seeds/seed.js");
 const request = require("supertest");
 const { toBeSortedBy } = require("jest-sorted");
+const { readFile } = require("fs/promises");
 
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
@@ -208,5 +209,19 @@ describe("GET /api/articles/:article_id/comments", () => {
           });
       })
     );
+  });
+});
+describe("POST /api/articles/:article_id/comments", () => {});
+describe("GET /api", () => {
+  it("Returns status 200 and serves the endpoints.json file (usage examples object)", async () => {
+    const expected = JSON.parse(await readFile("./endpoints.json"));
+    request(app)
+      .get("/api")
+      .expect(200)
+      .expect("Content-Type", "application/json; charset=utf-8")
+      .then((res) => {
+        const { body } = res;
+        expect(body).toEqual(expected);
+      });
   });
 });

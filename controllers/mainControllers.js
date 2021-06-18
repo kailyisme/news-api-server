@@ -9,7 +9,7 @@ const {
 } = require("../models/mainModels");
 
 // GET /api/topics
-exports.getTopics = function (req, res) {
+exports.getTopics = function (req, res, next) {
   selectAllTopics()
     .then((topics) => {
       res.send({ topics });
@@ -17,13 +17,13 @@ exports.getTopics = function (req, res) {
     .catch(next);
 };
 // GET /api/articles/:article_id
-exports.getArticleByID = function (req, res) {
+exports.getArticleByID = function (req, res, next) {
   selectArticleByID(req.params.article_id)
     .then((article) => res.send({ article }))
     .catch(next);
 };
 // PATCH /api/articles/:article_id
-exports.patchArticleByIDByVotes = function (req, res) {
+exports.patchArticleByIDByVotes = function (req, res, next) {
   const incVotesBy = req.body.inc_votes;
   updateArticleVotes(req.params.article_id, incVotesBy)
     .then((article) => res.send({ article }))
