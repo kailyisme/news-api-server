@@ -1,6 +1,6 @@
 {
   "GET /api": {
-    "description": "serves up a json representation of all the available endpoints of the api"
+    "description": "serves up a json representation of all the available endpoints of the api; ie this file, itself"
   },
   "GET /api/topics": {
     "description": "serves an array of all topics",
@@ -10,8 +10,8 @@
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all topics",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "description": "serves an array of all articles",
+    "queries": ["topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
         {
@@ -19,7 +19,72 @@
           "topic": "cooking",
           "author": "weegembump",
           "body": "Text from the article..",
+          "votes": 19,
           "created_at": 1527695953341
+        }
+      ]
+    }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "serves an article with a specified article id",
+    "exampleResponse": {
+      "article": {
+        "title": "Seafood substitutions are increasing",
+        "topic": "cooking",
+        "author": "weegembump",
+        "body": "Text from the article..",
+        "votes": 19,
+        "created_at": 1527695953341
+      }
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "increment article votes for a specified article id by providing an object",
+    "exampleRequestBody": {
+      "inc_votes": 1
+    },
+    "exampleResponse": {
+      "article": {
+        "title": "Seafood substitutions are increasing",
+        "topic": "cooking",
+        "author": "weegembump",
+        "body": "Text from the article..",
+        "votes": 20,
+        "created_at": 1527695953341
+      }
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "serves all comments with a specific article id",
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": "f78fe4fb-2cc0-4471-b60e-13a770dcda7f",
+          "author": "cooljmessy",
+          "article_id": 9,
+          "votes": 0,
+          "created_at": "2020-06-02T23:00:00.000Z",
+          "body": "Aut doloremque explicabo id."
+        }
+      ]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "inserts a comment under a specific article id",
+
+    "exampleRequestBody": {
+      "username": "cooljmessy",
+      "body": "Aut doloremque explicabo id."
+    },
+    "exampleResponse": {
+      "comments": [
+        {
+          "comment_id": "f78fe4fb-2cc0-4471-b60e-13a770dcda7f",
+          "author": "cooljmessy",
+          "article_id": 9,
+          "votes": 0,
+          "created_at": "2020-06-02T23:00:00.000Z",
+          "body": "Aut doloremque explicabo id."
         }
       ]
     }
