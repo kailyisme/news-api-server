@@ -19,7 +19,11 @@ exports.getTopics = function (req, res, next) {
 // GET /api/articles/:article_id
 exports.getArticleByID = function (req, res, next) {
   selectArticleByID(req.params.article_id)
-    .then((article) => res.send({ article }))
+    .then((article) => {
+      if (!article) {
+        return Promise.reject({ status: 404, msg: "Invalid Article ID" });
+      } else res.send({ article });
+    })
     .catch(next);
 };
 // PATCH /api/articles/:article_id
@@ -34,6 +38,9 @@ exports.getAllArticles = function (req, res, next) {
   const { sort_by, order, topic } = req.query;
   selectAllArticles(sort_by, order, topic)
     .then((articles) => {
+      if (articles.length === 0) {
+        return Promise.reject({ status: 404, msg: "Invalid Topic" });
+      }
       res.send({ articles });
     })
     .catch(next);
@@ -53,7 +60,7 @@ exports.postArticleCommentById = function (req, res, next) {
   const { username, body } = req.body;
   insertCommentByArticleId(article_id, username, body)
     .then((comment) => {
-      res.status(201).send({comment});
+      res.status(201).send({ comment });
     })
     .catch(next);
 };

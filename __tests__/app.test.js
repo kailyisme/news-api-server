@@ -53,6 +53,18 @@ describe("/api/articles/:article_id", () => {
           );
         });
     });
+    test("Returns 404 and a message saying not existing article_id", async () => {
+      const articleIDExpected = 13;
+      const objectResponseExpected = { msg: "Invalid Article ID" };
+      await request(app)
+        .get(`/api/articles/${articleIDExpected}`)
+        .expect(404)
+        .expect("Content-Type", "application/json; charset=utf-8")
+        .then((res) => {
+          const { body } = res;
+          expect(body).toEqual(objectResponseExpected);
+        });
+    });
   });
 
   describe("PATCH", () => {
@@ -162,7 +174,7 @@ describe("GET /api/articles", () => {
       .expect("Content-Type", "application/json; charset=utf-8")
       .then((res) => {
         const { body } = res;
-        expect(body).toEqual({ err: "Invalid Topic" });
+        expect(body).toEqual({ msg: "Invalid Topic" });
       });
   });
 });
@@ -223,16 +235,16 @@ describe("/api/articles/:article_id/comments", () => {
         .expect("Content-Type", "application/json; charset=utf-8")
         .then((res) => {
           const { body } = res;
-            expect(body.comment).toEqual(
-              expect.objectContaining({
-                comment_id: expect.any(String),
-                author: objectToSend.username,
-                article_id,
-                votes: 0,
-                created_at: expect.any(String),
-                body: objectToSend.body,
-              })
-            );
+          expect(body.comment).toEqual(
+            expect.objectContaining({
+              comment_id: expect.any(String),
+              author: objectToSend.username,
+              article_id,
+              votes: 0,
+              created_at: expect.any(String),
+              body: objectToSend.body,
+            })
+          );
         });
     });
   });

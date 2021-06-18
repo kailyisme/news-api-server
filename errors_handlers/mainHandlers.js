@@ -4,7 +4,8 @@ exports.notFound = function (req, res, next) {
 
 exports.customErrors = function (err, req, res, next) {
   if (err.status && err.msg) {
-    res.status(err.status).send({ err: err.msg });
+    const {status, msg} = err;
+    res.status(status).send({ msg });
   } else next(err);
 };
 

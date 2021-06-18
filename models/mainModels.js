@@ -47,9 +47,6 @@ exports.selectAllArticles = async function (sort_by, order, topic) {
     const result = await dbConn.query(
       format("SELECT * FROM topics WHERE slug=%L;", topic)
     );
-    if (result.rows.length === 0) {
-      return Promise.reject({ status: 404, msg: "Invalid Topic" });
-    }
   }
   return postgresNumber(result.rows, "comment_count");
 };
