@@ -9,7 +9,7 @@ const { readFile } = require("fs/promises");
 beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
-describe("/api/topics", () => {
+describe("GET /api/topics", () => {
   it("Should return an array of topics as objects under topics as key", async () => {
     await request(app)
       .get("/api/topics")
@@ -84,10 +84,7 @@ describe("/api/articles/:article_id", () => {
     });
   });
 });
-
-// added the following test
-
-describe("/api/articles", () => {
+describe("GET /api/articles", () => {
   it("Should return an array of articles as objects ", async () => {
     await request(app)
       .get("/api/articles")
@@ -169,49 +166,77 @@ describe("/api/articles", () => {
       });
   });
 });
-describe("GET /api/articles/:article_id/comments", () => {
-  test("Should return an array of comments for a specific article_id", async function () {
-    const article_id = 1;
-    await request(app)
-      .get(`/api/articles/${article_id}/comments`)
-      .expect(200)
-      .expect("Content-Type", "application/json; charset=utf-8")
-      .then((res) => {
-        const { body } = res;
-        expect(body.comments).toHaveLength(13);
-        body.comments.forEach((comment) => {
-          expect(comment).toEqual(
-            expect.objectContaining({
-              article_id: expect.any(Number),
-              comment_id: expect.any(String),
-              votes: expect.any(Number),
-              created_at: expect.any(String),
-              author: expect.any(String),
-              body: expect.any(String),
-            })
-          );
-        });
-      });
-  });
-  test("Should return the correct number of comments for the article_id", function () {
-    const article_ids = [2, 5, 6, 9];
-    const expectedComments = [0, 2, 1, 2];
-    return Promise.all(
-      article_ids.map((id, i) => {
-        const endpoint = `/api/articles/${id}/comments`;
-        return request(app)
-          .get(endpoint)
-          .expect(200)
-          .expect("Content-Type", "application/json; charset=utf-8")
-          .then((res) => {
-            const { body } = res;
-            expect(body.comments).toHaveLength(expectedComments[i]);
+describe("/api/articles/:article_id/comments", () => {
+  describe("GET", () => {
+    test("Should return an array of comments for a specific article_id", async function () {
+      const article_id = 1;
+      await request(app)
+        .get(`/api/articles/${article_id}/comments`)
+        .expect(200)
+        .expect("Content-Type", "application/json; charset=utf-8")
+        .then((res) => {
+          const { body } = res;
+          expect(body.comments).toHaveLength(13);
+          body.comments.forEach((comment) => {
+            expect(comment).toEqual(
+              expect.objectContaining({
+                article_id: expect.any(Number),
+                comment_id: expect.any(String),
+                votes: expect.any(Number),
+                created_at: expect.any(String),
+                author: expect.any(String),
+                body: expect.any(String),
+              })
+            );
           });
-      })
-    );
+        });
+    });
+    test("Should return the correct number of comments for the article_id", function () {
+      const article_ids = [2, 5, 6, 9];
+      const expectedComments = [0, 2, 1, 2];
+      return Promise.all(
+        article_ids.map((id, i) => {
+          const endpoint = `/api/articles/${id}/comments`;
+          return request(app)
+            .get(endpoint)
+            .expect(200)
+            .expect("Content-Type", "application/json; charset=utf-8")
+            .then((res) => {
+              const { body } = res;
+              expect(body.comments).toHaveLength(expectedComments[i]);
+            });
+        })
+      );
+    });
+  });
+  describe("POST", () => {
+    it("Returns status 201 and adds comment to a specific article_id", () => {
+      const article_id = 1;
+      const objectToSend = {
+        username: "butter_bridge",
+        body: "testing testing, 123",
+      };
+      return request(app)
+        .post(`/api/articles/${article_id}/comments`)
+        .send(objectToSend)
+        .expect(201)
+        .expect("Content-Type", "application/json; charset=utf-8")
+        .then((res) => {
+          const { body } = res;
+            expect(body.comment).toEqual(
+              expect.objectContaining({
+                comment_id: expect.any(String),
+                author: objectToSend.username,
+                article_id,
+                votes: 0,
+                created_at: expect.any(String),
+                body: objectToSend.body,
+              })
+            );
+        });
+    });
   });
 });
-describe("POST /api/articles/:article_id/comments", () => {});
 describe("GET /api", () => {
   it("Returns status 200 and serves the endpoints.json file (usage examples object)", async () => {
     const expected = JSON.parse(await readFile("./endpoints.json"));

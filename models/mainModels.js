@@ -67,7 +67,7 @@ exports.insertCommentByArticleId = async function (article_id, username, body) {
     "INSERT INTO comments (author, article_id, body) VALUES ($1, $2, $3) RETURNING *;",
     [username, article_id, body]
   );
-  return result.rows;
+  return result.rows[0];
 };
 
 exports.parseEndpoints = async function () {
