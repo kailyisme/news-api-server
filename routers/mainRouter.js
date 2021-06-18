@@ -6,10 +6,12 @@ const {
   getAllArticles,
   getArticleCommentsById,
   postArticleCommentById,
+  getEndpoints,
 } = require("../controllers/mainControllers");
 
 const router = Router();
 
+router.get("/api", getEndpoints);
 router.get("/api/topics", getTopics);
 
 router.get("/api/articles", getAllArticles);

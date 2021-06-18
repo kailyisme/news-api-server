@@ -5,6 +5,7 @@ const {
   selectAllArticles,
   selectArticleCommentsById,
   insertCommentByArticleId,
+  parseEndpoints,
 } = require("../models/mainModels");
 
 // GET /api/topics
@@ -55,4 +56,9 @@ exports.postArticleCommentById = function (req, res, next) {
       res.status(201).send(comment);
     })
     .catch(next);
+};
+// GET /api
+exports.getEndpoints = async function (req, res, next) {
+  const endPoints = await parseEndpoints().catch(next);
+  res.send(endPoints);
 };

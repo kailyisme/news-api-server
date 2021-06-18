@@ -1,6 +1,7 @@
 const format = require("pg-format");
 const dbConn = require("../db/connection");
 const { postgresNumber } = require("../db/utils/data-manipulation");
+const fs = require("fs/promises");
 
 exports.selectAllTopics = async function () {
   const result = await dbConn.query("SELECT * FROM topics;");
@@ -67,6 +68,11 @@ exports.insertCommentByArticleId = async function (article_id, username, body) {
     [username, article_id, body]
   );
   return result.rows;
+};
+
+exports.parseEndpoints = async function () {
+  const endPointFile = await fs.readFile("./endpoints.json");
+  return JSON.parse(endPointFile);
 };
 
 //postgres Error 42703 - errorMissingColumn - not a valid column to sort by?
