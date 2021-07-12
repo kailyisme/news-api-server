@@ -18,13 +18,18 @@ A bit longer description? The scope that this project was done. Northcoders, boo
     * bullet
     * points
     * here
-* Setup
-    * Describe here how to setup locally
-    * Describe here how to setup on heroku
+## Setup
+### Locally
+    * ```git clone``` this repo
+    * ``` cd ``` into the repo on your local clone
+    * ``` npm i``` with node previouly installed
+### Heroku
+    * toDo
     * Provide clear instructions of how to clone, install dependencies, seed local database, and run tests
     * Include information about how to create the two .env files
     * Specify minimum versions of Node.js and Postgres needed to run the project
-* Testing
-    * Describe here how to check the sanity of the package - testing all endpoints with jest
-* Credits
-    * Mike repo, kaily collaborator
+## Testing
+    ```npm t``` on local directory
+## Credits
+* [Kaily](https://kailyis.me/github)
+* [Mike](https://github.com/Mike-200)
