@@ -41,11 +41,11 @@ exports.selectAllArticles = async function (sort_by, order, topic) {
   }
 
   const result = await dbConn.query(
-    `SELECT articles.*, COUNT(comments.comment_id) AS comment_count
-    FROM articles
-    LEFT JOIN comments ON articles.article_id = comments.article_id
-    ${whereTopic}
-    GROUP BY article_id
+    `SELECT articles.*, COUNT(comments.comment_id) AS comment_count 
+    FROM articles 
+    LEFT JOIN comments ON articles.article_id = comments.article_id 
+    ${whereTopic} 
+    GROUP BY articles.article_id 
     ORDER BY ${sort_by} ${order};`
   );
   if (result.rows.length === 0) {
