@@ -1,5 +1,9 @@
 # README ToDo list
- 
+
+## Hosted at:
+* [Heroku](https://nc-news-proj.herokuapp.com/api/)
+
+## ToDo
 Quick small buttons straight to demo, compiled versions/zip (if applicable), to Features, to Usage, to Setup, to Test the package, to Credits  
 Short short description, what it is suppose to do, what it does  
 1 main Screenshot  
